@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask Elmer</title>
+</head>
+<body>
+  <h1>Ask Elmer</h1>
+  <input type="text" id="question" placeholder="Ask about Cottonwood Corner..." />
+  <button onclick="askElmer()">Ask Elmer</button>
+  <audio id="voice" controls></audio>
+  <script>
+    async function askElmer() {
+      const question = document.getElementById('question').value;
+      const res = await fetch('/api/elmer', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ question })
+      });
+      const data = await res.blob();
+      const audioUrl = URL.createObjectURL(data);
+      const audio = document.getElementById('voice');
+      audio.src = audioUrl;
+      audio.play();
+    }
+  </script>
+</body>
+</html>
